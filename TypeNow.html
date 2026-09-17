@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Typing Master</title>
+  <title>Touch Typing Master</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -668,7 +668,7 @@
     <nav>
       <div class="logo" onclick="switchView('home')">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16M7 17v2M17 17v2"/></svg>
-        TypeNow
+        TypingMaster
       </div>
       <div class="nav-links">
         <button class="nav-btn active" id="nav-home" onclick="switchView('home')">Home</button>
@@ -848,8 +848,8 @@
             <h4>Characters</h4>
             <div id="res-chars">0/0/0</div>
           </div>
-          <div class="metric-card" data-tooltip="Exact duration taken to complete the typing test.">
-            <h4>Time</h4>
+          <div class="metric-card" id="card-fourth" data-tooltip="Exact duration taken to complete the typing test.">
+            <h4 id="res-fourth-label">Time</h4>
             <div id="res-time">0s</div>
           </div>
         </div>
@@ -1445,7 +1445,24 @@
       document.getElementById('res-raw').textContent = `${metrics.raw} WPM`;
       document.getElementById('res-type').textContent = state.mode === 'time' ? `Time ${state.targetTime}s` : `Words ${state.targetWords}`;
       document.getElementById('res-chars').textContent = `${metrics.domStats.correct}/${metrics.domStats.incorrect + metrics.domStats.extra}/${state.totalKeystrokes}`;
-      document.getElementById('res-time').textContent = formattedTime;
+
+      const fourthCard = document.getElementById('card-fourth');
+      const fourthLabel = document.getElementById('res-fourth-label');
+      const fourthVal = document.getElementById('res-time');
+
+      if (state.mode === 'time') {
+        const currentWord = state.words[state.activeWordIdx];
+        const isCurrentWordFinished = currentWord && state.activeCharIdx >= currentWord.length;
+        const wordsTyped = state.activeWordIdx + (isCurrentWordFinished ? 1 : 0);
+
+        if (fourthLabel) fourthLabel.textContent = 'Words';
+        if (fourthVal) fourthVal.textContent = wordsTyped;
+        if (fourthCard) fourthCard.setAttribute('data-tooltip', 'Total number of words typed during the timed test.');
+      } else {
+        if (fourthLabel) fourthLabel.textContent = 'Time';
+        if (fourthVal) fourthVal.textContent = formattedTime;
+        if (fourthCard) fourthCard.setAttribute('data-tooltip', 'Exact duration taken to complete the typing test.');
+      }
 
       switchView('results');
     }

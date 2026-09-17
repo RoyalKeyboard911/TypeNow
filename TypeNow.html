@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <title>Touch Typing Master</title>
+  <title>Typing Master</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -89,14 +89,14 @@
     }
 
     .logo {
-      font-size: 24px;
+      font-size: 32px;
       font-weight: 700;
       color: var(--accent);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 10px;
       user-select: none;
+      letter-spacing: -0.5px;
     }
 
     .nav-links { display: flex; gap: 20px; }
@@ -140,8 +140,8 @@
     /* Carousel Cards */
     .carousel-wrapper { display: flex; align-items: center; gap: 15px; margin-bottom: 50px; }
     .carousel-viewport { overflow: hidden; flex-grow: 1; border-radius: 12px; padding: 12px 5px; }
-    .carousel-track { display: flex; transition: transform 0.5s ease-in-out; width: 300%; }
-    .card-group { width: 33.3333%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 5px; flex-shrink: 0; }
+    .carousel-track { display: flex; transition: transform 0.5s ease-in-out; }
+    .card-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 5px; flex-shrink: 0; }
     
     .carousel-btn {
       background: var(--bg-surface); border: 1px solid var(--border-color); color: var(--text-muted);
@@ -243,7 +243,7 @@
     .c-btn:hover { color: var(--text-main); }
     .c-btn.active { color: var(--accent); font-weight: bold; background: rgba(16, 134, 220, 0.15); }
 
-    /* MONKEYTYPE SMOOTH TYPING AREA */
+    /* SMOOTH TYPING AREA */
     .typing-area {
       font-family: 'JetBrains Mono', monospace;
       font-size: 26px;
@@ -365,6 +365,7 @@
     }
 
     .results-grid { display: grid; grid-template-columns: 280px 1fr; gap: 30px; align-items: stretch; }
+    
     .stat-hero { 
       background: var(--bg-surface); 
       padding: 30px; 
@@ -374,12 +375,23 @@
       display: flex; 
       flex-direction: column; 
       justify-content: center;
-      position: relative;
-      cursor: help;
+      align-items: center;
+      gap: 15px;
+    }
+    .stat-box {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      border-radius: 8px;
+      transition: background-color 0.2s;
+    }
+    .stat-box:hover {
+      background-color: rgba(16, 134, 220, 0.05);
     }
     .stat-hero h3 { font-size: 20px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
     .stat-hero .val { font-size: 68px; color: var(--accent); font-weight: 700; line-height: 1; font-family: 'JetBrains Mono', monospace; }
-    .stat-hero .sub { font-size: 22px; color: var(--text-main); font-weight: 600; margin-top: 15px; font-family: 'JetBrains Mono', monospace; }
+    .stat-hero .sub { font-size: 22px; color: var(--text-main); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
     
     .chart-container { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; height: 350px; position: relative; width: 100%; }
     
@@ -393,7 +405,6 @@
       border-radius: 12px; 
       text-align: center; 
       position: relative;
-      cursor: help;
       transition: border-color 0.2s, transform 0.2s;
     }
     .metric-card:hover { border-color: var(--accent); transform: translateY(-2px); }
@@ -403,6 +414,7 @@
     /* Custom CSS Tooltip Box */
     [data-tooltip] {
       position: relative;
+      cursor: default;
     }
     [data-tooltip]::after {
       content: attr(data-tooltip);
@@ -512,7 +524,7 @@
         gap: 12px;
       }
       .logo {
-        font-size: 20px;
+        font-size: 24px;
       }
       .nav-links {
         order: 3;
@@ -667,8 +679,7 @@
     <!-- NAVBAR -->
     <nav>
       <div class="logo" onclick="switchView('home')">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16M7 17v2M17 17v2"/></svg>
-        TypingMaster
+        TypeNow
       </div>
       <div class="nav-links">
         <button class="nav-btn active" id="nav-home" onclick="switchView('home')">Home</button>
@@ -695,7 +706,7 @@
 
       <!-- Carousel Cards -->
       <div class="carousel-wrapper" id="carousel-wrapper">
-        <button class="carousel-btn prev" onclick="moveCarousel(-1)" aria-label="Previous Slide">&#10094;</button>
+        <button class="carousel-btn prev" onclick="window.moveCarousel(-1)" aria-label="Previous Slide">&#10094;</button>
         <div class="carousel-viewport">
           <div class="carousel-track" id="card-track">
             
@@ -758,7 +769,7 @@
 
           </div>
         </div>
-        <button class="carousel-btn next" onclick="moveCarousel(1)" aria-label="Next Slide">&#10095;</button>
+        <button class="carousel-btn next" onclick="window.moveCarousel(1)" aria-label="Next Slide">&#10095;</button>
       </div>
 
       <!-- Clean 8 Step Guide with Next & Back Navigation -->
@@ -826,10 +837,14 @@
     <!-- 3. RESULTS VIEW -->
     <section id="view-results" class="view">
       <div class="results-grid">
-        <div class="stat-hero" data-tooltip="Net WPM (Words Per Minute) calculated using standard Monkeytype formula: (Correct Characters / 5) / (Time in minutes).">
-          <h3>WPM</h3>
-          <div class="val" id="res-wpm">0</div>
-          <div class="sub" id="res-acc" data-tooltip="Accuracy percentage calculated as (Correct Keystrokes / Total Keystrokes) * 100.">100% Acc</div>
+        <div class="stat-hero">
+          <div class="stat-box" data-tooltip="Net WPM (Words Per Minute) measures your effective typing speed, calculated as (Correct Keystrokes / 5) divided by the time in minutes.">
+            <h3>WPM</h3>
+            <div class="val" id="res-wpm">0</div>
+          </div>
+          <div class="stat-box" data-tooltip="Accuracy percentage calculated as (Correct Keystrokes / Total Typed) * 100.">
+            <div class="sub" id="res-acc">100% Acc</div>
+          </div>
         </div>
         <div class="chart-container">
           <canvas id="resultsChart"></canvas>
@@ -844,12 +859,12 @@
             <h4>Raw Speed</h4>
             <div id="res-raw">0 WPM</div>
           </div>
-          <div class="metric-card" data-tooltip="Character breakdown formatted as [Correct / Incorrect / Total] keypresses.">
+          <div class="metric-card" data-tooltip="Character breakdown formatted as [Correct / Incorrect / Total Typed] keypresses.">
             <h4>Characters</h4>
             <div id="res-chars">0/0/0</div>
           </div>
-          <div class="metric-card" id="card-fourth" data-tooltip="Exact duration taken to complete the typing test.">
-            <h4 id="res-fourth-label">Time</h4>
+          <div class="metric-card" data-tooltip="Exact duration taken to complete the typing test.">
+            <h4>Time</h4>
             <div id="res-time">0s</div>
           </div>
         </div>
@@ -907,24 +922,59 @@
     initSystemTheme();
 
     /* =========================================
-       2. CAROUSEL & ROTATION (30s & HOVER INTERACTION)
+       2. CAROUSEL & ROTATION (INFINITE LOOP & TIMING)
        ========================================= */
-    let currentCarouselIndex = 0;
-    const totalGroups = 3;
+    let carouselIndex = 1;
+    let isCarouselTransitioning = false;
+    let totalRealGroups = 0;
     let carouselTimer = null;
     let resumeHoverTimeout = null;
 
-    function moveCarousel(direction) {
-      currentCarouselIndex = (currentCarouselIndex + direction + totalGroups) % totalGroups;
-      const track = document.getElementById('card-track');
-      if (track) {
-        track.style.transform = `translateX(-${currentCarouselIndex * 33.3333}%)`;
-      }
+    const track = document.getElementById('card-track');
+    if (track) {
+      const groups = Array.from(track.children);
+      totalRealGroups = groups.length;
+      
+      const firstClone = groups[0].cloneNode(true);
+      const lastClone = groups[groups.length - 1].cloneNode(true);
+      
+      track.appendChild(firstClone);
+      track.insertBefore(lastClone, groups[0]);
+      
+      const totalGroupsIncClones = totalRealGroups + 2;
+      track.style.width = `${totalGroupsIncClones * 100}%`;
+      
+      Array.from(track.children).forEach(child => {
+        child.style.width = `${100 / totalGroupsIncClones}%`;
+      });
+
+      track.style.transform = `translateX(-${(100 / totalGroupsIncClones) * carouselIndex}%)`;
+
+      window.moveCarousel = function(direction) {
+        if (isCarouselTransitioning) return;
+        isCarouselTransitioning = true;
+        carouselIndex += direction;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.style.transform = `translateX(-${(100 / totalGroupsIncClones) * carouselIndex}%)`;
+      };
+
+      track.addEventListener('transitionend', () => {
+        isCarouselTransitioning = false;
+        if (carouselIndex === 0) {
+          track.style.transition = 'none';
+          carouselIndex = totalRealGroups;
+          track.style.transform = `translateX(-${(100 / totalGroupsIncClones) * carouselIndex}%)`;
+        } else if (carouselIndex === totalRealGroups + 1) {
+          track.style.transition = 'none';
+          carouselIndex = 1;
+          track.style.transform = `translateX(-${(100 / totalGroupsIncClones) * carouselIndex}%)`;
+        }
+      });
     }
 
     function startCarouselInterval(intervalMs = 30000) {
       stopCarouselInterval();
-      carouselTimer = setInterval(() => moveCarousel(1), intervalMs);
+      carouselTimer = setInterval(() => window.moveCarousel(1), intervalMs);
     }
 
     function stopCarouselInterval() {
@@ -938,7 +988,7 @@
       carouselElem.addEventListener('mouseleave', () => {
         stopCarouselInterval();
         resumeHoverTimeout = setTimeout(() => {
-          moveCarousel(1);
+          window.moveCarousel(1);
           startCarouselInterval(30000);
         }, 2000);
       });
@@ -1121,9 +1171,9 @@
     renderKeyboard('free-keyboard');
 
     /* =========================================
-       4. EXACT MONKEYTYPE CALCULATIONS & ACCURACY FIX
+       4. TEST STATE & ACCURACY ENGINE
        ========================================= */
-    const WORD_BANK = ["the", "be", "of", "and", "a", "to", "in", "he", "have", "it", "that", "for", "they", "with", "as", "not", "on", "she", "at", "by", "this", "we", "you", "do", "but", "from", "or", "which", "one", "would", "all", "will", "there", "say", "who", "make", "when", "can", "more", "if", "no", "man", "out", "other", "so", "what", "time", "up", "go", "about", "than", "into", "could", "state", "only", "new", "year", "some", "take", "come", "these", "know", "see", "use", "get", "like", "then", "first", "any", "work", "now", "may", "such", "give", "over", "think", "most", "even", "find", "day", "also", "after", "way", "many", "must", "look", "before", "great", "back", "through", "long", "where", "much", "should", "well", "people", "down", "own", "just", "because", "good", "each", "those", "feel", "seem", "how", "high", "too", "place", "little", "world", "very", "still", "nation", "hand", "old", "life", "tell", "write", "become", "here", "show", "house", "both", "between", "need", "mean", "call", "develop", "under", "last", "right", "move", "thing", "general", "school", "never", "same", "another", "begin", "while", "number", "part", "turn", "real", "leave", "might", "want", "point", "form", "off", "child", "few", "small", "since", "against", "ask", "late", "home", "interest", "large", "person", "end", "open", "public", "follow", "during", "present", "without", "again", "hold", "govern", "around", "possible", "head", "consider", "word", "program", "problem", "however", "lead", "system", "set", "order", "eye", "plan", "run", "keep", "face", "fact", "group", "play", "stand", "increase", "early", "course", "change", "help", "line"];
+    const WORD_BANK = ["the", "of", "to", "and", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "with", "as", "i", "his", "they", "be", "at", "one", "have", "this", "from", "or", "had", "by", "not", "word", "but", "what", "some", "we", "can", "out", "other", "were", "all", "there", "when", "up", "use", "your", "how", "said", "an", "each", "she", "which", "do", "their", "time", "if", "will", "way", "about", "many", "then", "them", "write", "would", "like", "so", "these", "her", "long", "make", "thing", "see", "him", "two", "has", "look", "more", "day", "could", "go", "come", "did", "number", "sound", "no", "most", "people", "my", "over", "know", "water", "than", "call", "first", "who", "may", "down", "side", "been", "now", "find"];
 
     let state = {
       mode: 'time', 
@@ -1137,12 +1187,10 @@
       startTime: 0,
       timerInterval: null,
       timeElapsedMs: 0,
-      correctKeystrokes: 0,
-      incorrectKeystrokes: 0,
-      totalKeystrokes: 0,
       typedHistory: [],
       wpmHistory: [],
-      rawHistory: []
+      rawHistory: [],
+      timeHistory: []
     };
 
     let chartInstance = null;
@@ -1224,29 +1272,43 @@
     function generateWords() {
       let count = state.mode === 'words' ? state.targetWords : 200; 
       let arr = [];
+      let lastBaseWord = "";
       for(let i = 0; i < count; i++) {
-        let w = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)].toLowerCase();
+        let baseWord;
+        do {
+          baseWord = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
+        } while (baseWord === lastBaseWord);
+        lastBaseWord = baseWord;
+        
+        let finalWord = baseWord;
         if (state.includeCapitals && Math.random() > 0.6) {
-          w = w.charAt(0).toUpperCase() + w.slice(1);
+          finalWord = finalWord.charAt(0).toUpperCase() + finalWord.slice(1);
         }
-        arr.push(w);
+        arr.push(finalWord);
       }
       return arr;
     }
 
     function appendMoreWords(count = 30) {
       const area = document.getElementById('typing-area');
+      let lastBaseWord = state.words.length > 0 ? state.words[state.words.length - 1].toLowerCase() : "";
       for (let i = 0; i < count; i++) {
-        let w = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)].toLowerCase();
+        let baseWord;
+        do {
+          baseWord = WORD_BANK[Math.floor(Math.random() * WORD_BANK.length)];
+        } while (baseWord === lastBaseWord);
+        lastBaseWord = baseWord;
+
+        let finalWord = baseWord;
         if (state.includeCapitals && Math.random() > 0.6) {
-          w = w.charAt(0).toUpperCase() + w.slice(1);
+          finalWord = finalWord.charAt(0).toUpperCase() + finalWord.slice(1);
         }
-        state.words.push(w);
+        state.words.push(finalWord);
         state.typedHistory.push('');
 
         const wordDiv = document.createElement('div');
         wordDiv.className = 'word';
-        w.split('').forEach(char => {
+        finalWord.split('').forEach(char => {
           const charSpan = document.createElement('span');
           charSpan.className = 'char';
           charSpan.textContent = char;
@@ -1262,12 +1324,10 @@
       state.timeElapsedMs = 0;
       state.activeWordIdx = 0;
       state.activeCharIdx = 0;
-      state.correctKeystrokes = 0;
-      state.incorrectKeystrokes = 0;
-      state.totalKeystrokes = 0;
       state.typedHistory = [];
       state.wpmHistory = [];
       state.rawHistory = [];
+      state.timeHistory = [];
       state.words = generateWords();
 
       const area = document.getElementById('typing-area');
@@ -1293,7 +1353,7 @@
       focusHiddenInput();
     }
 
-    /* SMOOTH MONKEYTYPE CARET ENGINE */
+    /* SMOOTH CARET ENGINE */
     function updateCaret() {
       const caret = document.getElementById('caret');
       const area = document.getElementById('typing-area');
@@ -1342,29 +1402,41 @@
       if (target) target.classList.add('target');
     }
 
-    /* MONKEYTYPE ACCURACY & WPM ENGINE */
+    /* ACCURACY & WPM ENGINE */
     function getDOMCharacterStats() {
       let correct = 0;
       let incorrect = 0;
       let extra = 0;
+      let spacesCorrect = 0;
+      let spacesIncorrect = 0;
 
       const wordElements = document.querySelectorAll('#typing-area .word');
       wordElements.forEach((wEl, wIdx) => {
         if (wIdx <= state.activeWordIdx) {
           const chars = wEl.querySelectorAll('.char');
-          chars.forEach(c => {
+          
+          chars.forEach((c, cIdx) => {
+            const isTyped = state.typedHistory[wIdx] && state.typedHistory[wIdx].length > cIdx;
             if (c.classList.contains('correct')) correct++;
             else if (c.classList.contains('extra')) extra++;
-            else if (c.classList.contains('incorrect')) incorrect++;
+            else if (c.classList.contains('incorrect') && isTyped) incorrect++;
           });
-          // Add 1 space character for each completed word before current word
+
           if (wIdx < state.activeWordIdx) {
-            correct++;
+            // Count spaces strictly to prevent spamming from falsely inflating accuracy
+            const expected = state.words[wIdx];
+            const typed = state.typedHistory[wIdx];
+            if (expected === typed) spacesCorrect++;
+            else spacesIncorrect++;
           }
         }
       });
 
-      return { correct, incorrect, extra };
+      const totalCorrect = correct + spacesCorrect;
+      const totalIncorrect = incorrect + extra + spacesIncorrect;
+      const totalTypedChars = totalCorrect + totalIncorrect;
+
+      return { correct: totalCorrect, incorrect: totalIncorrect, extra, totalTypedChars };
     }
 
     function calculateMetrics() {
@@ -1373,15 +1445,15 @@
 
       const domStats = getDOMCharacterStats();
 
-      // Monkeytype formula: standard WPM = (Correct Characters + Spaces) / 5 / minutes
+      // Standard formulation: WPM = (Correct Characters) / 5 / minutes
       const wpm = Math.max(0, Math.round((domStats.correct / 5) / minutes));
       
-      // Raw WPM = (Total Keystrokes / 5) / minutes
-      const raw = Math.max(0, Math.round((state.totalKeystrokes / 5) / minutes));
+      // Raw WPM = (Total Typed Characters) / 5 / minutes
+      const raw = Math.max(0, Math.round((domStats.totalTypedChars / 5) / minutes));
       
-      // Accuracy = (Correct Keystrokes / Total Keystrokes) * 100
-      const acc = state.totalKeystrokes > 0 
-        ? Math.min(100, Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100)) 
+      // Accuracy
+      const acc = domStats.totalTypedChars > 0 
+        ? Math.min(100, Math.round((domStats.correct / domStats.totalTypedChars) * 100)) 
         : 100;
 
       return { wpm, raw, acc, elapsedSec, domStats };
@@ -1397,9 +1469,10 @@
 
         // Record timeline data for live performance chart
         const secIndex = Math.floor(state.timeElapsedMs / 1000);
-        if (secIndex > state.wpmHistory.length) {
+        if (secIndex > state.timeHistory.length && secIndex > 0) {
           state.wpmHistory.push(metrics.wpm);
           state.rawHistory.push(metrics.raw);
+          state.timeHistory.push(secIndex);
         }
 
         updateProgressUI();
@@ -1431,38 +1504,22 @@
       state.isRunning = false;
 
       const metrics = calculateMetrics();
+      const finalSec = metrics.elapsedSec;
       const formattedTime = state.mode === 'words' 
-        ? `${metrics.elapsedSec.toFixed(1)}s` 
-        : `${Math.round(metrics.elapsedSec)}s`;
+        ? `${finalSec.toFixed(1)}s` 
+        : `${Math.round(finalSec)}s`;
 
-      if (state.wpmHistory.length === 0) {
-        state.wpmHistory.push(metrics.wpm);
-        state.rawHistory.push(metrics.raw);
-      }
+      // Record the precise end-of-test frame for an accurate chart ending
+      state.wpmHistory.push(metrics.wpm);
+      state.rawHistory.push(metrics.raw);
+      state.timeHistory.push(finalSec);
 
       document.getElementById('res-wpm').textContent = metrics.wpm;
       document.getElementById('res-acc').textContent = `${metrics.acc}% Acc`;
       document.getElementById('res-raw').textContent = `${metrics.raw} WPM`;
       document.getElementById('res-type').textContent = state.mode === 'time' ? `Time ${state.targetTime}s` : `Words ${state.targetWords}`;
-      document.getElementById('res-chars').textContent = `${metrics.domStats.correct}/${metrics.domStats.incorrect + metrics.domStats.extra}/${state.totalKeystrokes}`;
-
-      const fourthCard = document.getElementById('card-fourth');
-      const fourthLabel = document.getElementById('res-fourth-label');
-      const fourthVal = document.getElementById('res-time');
-
-      if (state.mode === 'time') {
-        const currentWord = state.words[state.activeWordIdx];
-        const isCurrentWordFinished = currentWord && state.activeCharIdx >= currentWord.length;
-        const wordsTyped = state.activeWordIdx + (isCurrentWordFinished ? 1 : 0);
-
-        if (fourthLabel) fourthLabel.textContent = 'Words';
-        if (fourthVal) fourthVal.textContent = wordsTyped;
-        if (fourthCard) fourthCard.setAttribute('data-tooltip', 'Total number of words typed during the timed test.');
-      } else {
-        if (fourthLabel) fourthLabel.textContent = 'Time';
-        if (fourthVal) fourthVal.textContent = formattedTime;
-        if (fourthCard) fourthCard.setAttribute('data-tooltip', 'Exact duration taken to complete the typing test.');
-      }
+      document.getElementById('res-chars').textContent = `${metrics.domStats.correct}/${metrics.domStats.incorrect}/${metrics.domStats.totalTypedChars}`;
+      document.getElementById('res-time').textContent = formattedTime;
 
       switchView('results');
     }
@@ -1484,20 +1541,20 @@
       const mutedColor = isDark ? '#868e96' : '#6c757d';
       const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
 
-      let labels = state.wpmHistory.map((_, i) => `${i + 1}s`);
-      let wpmData = [...state.wpmHistory];
-      let rawData = [...state.rawHistory];
+      let labels = ['0s', ...state.timeHistory.map(t => typeof t === 'number' && !Number.isInteger(t) ? `${t.toFixed(1)}s` : `${t}s`)];
+      let wpmData = [0, ...state.wpmHistory];
+      let rawData = [0, ...state.rawHistory];
 
-      if (labels.length === 0) {
-        labels = ['1s'];
-        wpmData = [0];
-        rawData = [0];
+      // Safe fallback for extremely short/broken tests avoiding floating single dots
+      if (labels.length === 1) {
+        labels = ['0s', '1s'];
+        wpmData = [0, 0];
+        rawData = [0, 0];
       }
 
       const maxVal = Math.max(...wpmData, ...rawData, 10);
-      const minVal = Math.min(...wpmData, ...rawData, 0);
       const yMax = Math.ceil((maxVal + 5) / 10) * 10;
-      const yMin = Math.max(0, Math.floor((minVal - 5) / 10) * 10);
+      const yMin = 0;
 
       const ctx = canvas.getContext('2d');
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -1520,7 +1577,8 @@
               pointBackgroundColor: '#1086dc',
               pointBorderColor: '#ffffff',
               pointRadius: labels.length > 30 ? 0 : 3,
-              pointHoverRadius: 6
+              pointHoverRadius: 6,
+              clip: false
             },
             {
               label: 'Raw WPM',
@@ -1532,13 +1590,22 @@
               tension: 0.3,
               borderWidth: 2,
               pointRadius: 0,
-              pointHoverRadius: 4
+              pointHoverRadius: 4,
+              clip: false
             }
           ]
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          layout: {
+            padding: {
+              bottom: 10,
+              top: 5,
+              left: 5,
+              right: 5
+            }
+          },
           interaction: {
             mode: 'index',
             intersect: false
@@ -1624,7 +1691,6 @@
 
       // BACKSPACE HANDLING
       if (key === 'Backspace') {
-        state.totalKeystrokes++;
         if (state.activeCharIdx > 0) {
           state.activeCharIdx--;
           const charSpan = chars[state.activeCharIdx];
@@ -1652,9 +1718,6 @@
           const isLastWordInBank = (state.activeWordIdx === state.words.length - 1);
           const isLastWord = isLastWordInWordsMode || isLastWordInBank;
 
-          state.totalKeystrokes++;
-          state.correctKeystrokes++; // Space keypress counts towards keystrokes
-
           // If on the last word, pressing spacebar ends the test even if the last word was typed inaccurately!
           if (isLastWord) {
             state.activeWordIdx++;
@@ -1678,7 +1741,6 @@
       if (key.length > 1) return;
 
       // CHARACTER TYPING LOGIC
-      state.totalKeystrokes++;
       const expectedChar = targetWord[state.activeCharIdx];
 
       if (state.activeCharIdx < targetWord.length) {
@@ -1686,10 +1748,8 @@
         if (charSpan) {
           if (key === expectedChar) {
             charSpan.classList.add('correct');
-            state.correctKeystrokes++;
           } else {
             charSpan.classList.add('incorrect');
-            state.incorrectKeystrokes++;
           }
         }
         state.activeCharIdx++;
@@ -1699,7 +1759,6 @@
         extraSpan.className = 'char extra incorrect';
         extraSpan.textContent = key;
         wordEl.appendChild(extraSpan);
-        state.incorrectKeystrokes++;
         state.activeCharIdx++;
       }
 

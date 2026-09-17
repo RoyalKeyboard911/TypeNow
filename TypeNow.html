@@ -382,18 +382,18 @@
       display: inline-flex;
       flex-direction: column;
       align-items: center;
-      padding: 10px;
+      padding: 10px 20px;
       border-radius: 8px;
       transition: background-color 0.2s;
     }
     .stat-box:hover {
       background-color: rgba(16, 134, 220, 0.05);
     }
-    .stat-hero h3 { font-size: 20px; color: var(--text-muted); margin-bottom: 10px; font-weight: 600; }
+    .stat-hero h3 { font-size: 20px; color: var(--text-muted); margin-bottom: 5px; font-weight: 600; }
     .stat-hero .val { font-size: 68px; color: var(--accent); font-weight: 700; line-height: 1; font-family: 'JetBrains Mono', monospace; }
-    .stat-hero .sub { font-size: 22px; color: var(--text-main); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+    .stat-hero .sub { font-size: 24px; color: var(--text-main); font-weight: 600; font-family: 'JetBrains Mono', monospace; }
     
-    .chart-container { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; height: 350px; position: relative; width: 100%; }
+    .chart-container { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px; padding: 0; height: 350px; position: relative; width: 100%; }
     
     .metrics-row { grid-column: span 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 10px; }
     
@@ -430,7 +430,7 @@
       font-family: 'Inter', sans-serif;
       font-weight: 400;
       white-space: normal;
-      width: 200px;
+      width: 220px;
       text-align: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       opacity: 0;
@@ -524,7 +524,7 @@
         gap: 12px;
       }
       .logo {
-        font-size: 24px;
+        font-size: 28px;
       }
       .nav-links {
         order: 3;
@@ -624,7 +624,6 @@
       }
       .chart-container {
         height: 260px;
-        padding: 10px;
       }
       .stat-hero {
         padding: 20px;
@@ -838,11 +837,11 @@
     <section id="view-results" class="view">
       <div class="results-grid">
         <div class="stat-hero">
-          <div class="stat-box" data-tooltip="Net WPM (Words Per Minute) measures your effective typing speed, calculated as (Correct Keystrokes / 5) divided by the time in minutes.">
+          <div class="stat-box" data-tooltip="Net WPM evaluates effective typing speed based on perfectly correct keystrokes submitted.">
             <h3>WPM</h3>
             <div class="val" id="res-wpm">0</div>
           </div>
-          <div class="stat-box" data-tooltip="Accuracy percentage calculated as (Correct Keystrokes / Total Typed) * 100.">
+          <div class="stat-box" data-tooltip="Accuracy tracks all keystrokes ever pressed during the test, ensuring all mistakes count.">
             <div class="sub" id="res-acc">100% Acc</div>
           </div>
         </div>
@@ -855,11 +854,11 @@
             <h4>Test Type</h4>
             <div id="res-type">Time 30s</div>
           </div>
-          <div class="metric-card" data-tooltip="Raw typing speed including uncorrected errors and wrong characters typed.">
+          <div class="metric-card" data-tooltip="Raw typing speed including all uncorrected errors and wrong characters typed.">
             <h4>Raw Speed</h4>
             <div id="res-raw">0 WPM</div>
           </div>
-          <div class="metric-card" data-tooltip="Character breakdown formatted as [Correct / Incorrect / Total Typed] keypresses.">
+          <div class="metric-card" data-tooltip="Character breakdown formatted as [Correct / Incorrect / Total Lifetime Keystrokes]">
             <h4>Characters</h4>
             <div id="res-chars">0/0/0</div>
           </div>
@@ -1173,7 +1172,7 @@
     /* =========================================
        4. TEST STATE & ACCURACY ENGINE
        ========================================= */
-    const WORD_BANK = ["the", "of", "to", "and", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "with", "as", "i", "his", "they", "be", "at", "one", "have", "this", "from", "or", "had", "by", "not", "word", "but", "what", "some", "we", "can", "out", "other", "were", "all", "there", "when", "up", "use", "your", "how", "said", "an", "each", "she", "which", "do", "their", "time", "if", "will", "way", "about", "many", "then", "them", "write", "would", "like", "so", "these", "her", "long", "make", "thing", "see", "him", "two", "has", "look", "more", "day", "could", "go", "come", "did", "number", "sound", "no", "most", "people", "my", "over", "know", "water", "than", "call", "first", "who", "may", "down", "side", "been", "now", "find"];
+    const WORD_BANK = ["the", "of", "to", "and", "a", "in", "is", "it", "you", "that", "he", "was", "for", "on", "are", "with", "as", "his", "they", "be", "at", "one", "have", "this", "from", "or", "had", "by", "not", "word", "but", "what", "some", "we", "can", "out", "other", "were", "all", "there", "when", "up", "use", "your", "how", "said", "an", "each", "she", "which", "do", "their", "time", "if", "will", "way", "about", "many", "then", "them", "write", "would", "like", "so", "these", "her", "long", "make", "thing", "see", "him", "two", "has", "look", "more", "day", "could", "go", "come", "did", "number", "sound", "no", "most", "people", "my", "over", "know", "water", "than", "call", "first", "who", "may", "down", "side", "been", "now", "find"];
 
     let state = {
       mode: 'time', 
@@ -1187,6 +1186,8 @@
       startTime: 0,
       timerInterval: null,
       timeElapsedMs: 0,
+      lifetimeTotalKeystrokes: 0,
+      lifetimeCorrectKeystrokes: 0,
       typedHistory: [],
       wpmHistory: [],
       rawHistory: [],
@@ -1324,6 +1325,8 @@
       state.timeElapsedMs = 0;
       state.activeWordIdx = 0;
       state.activeCharIdx = 0;
+      state.lifetimeTotalKeystrokes = 0;
+      state.lifetimeCorrectKeystrokes = 0;
       state.typedHistory = [];
       state.wpmHistory = [];
       state.rawHistory = [];
@@ -1404,39 +1407,35 @@
 
     /* ACCURACY & WPM ENGINE */
     function getDOMCharacterStats() {
-      let correct = 0;
-      let incorrect = 0;
-      let extra = 0;
-      let spacesCorrect = 0;
-      let spacesIncorrect = 0;
+      let correctChars = 0;
+      let incorrectChars = 0;
+      let extraChars = 0;
 
       const wordElements = document.querySelectorAll('#typing-area .word');
       wordElements.forEach((wEl, wIdx) => {
         if (wIdx <= state.activeWordIdx) {
           const chars = wEl.querySelectorAll('.char');
           
-          chars.forEach((c, cIdx) => {
-            const isTyped = state.typedHistory[wIdx] && state.typedHistory[wIdx].length > cIdx;
-            if (c.classList.contains('correct')) correct++;
-            else if (c.classList.contains('extra')) extra++;
-            else if (c.classList.contains('incorrect') && isTyped) incorrect++;
+          chars.forEach((c) => {
+            if (c.classList.contains('correct')) correctChars++;
+            else if (c.classList.contains('extra')) extraChars++;
+            else if (c.classList.contains('incorrect')) incorrectChars++;
           });
 
           if (wIdx < state.activeWordIdx) {
-            // Count spaces strictly to prevent spamming from falsely inflating accuracy
+            // Count space only if the submitted word is completely correct
             const expected = state.words[wIdx];
             const typed = state.typedHistory[wIdx];
-            if (expected === typed) spacesCorrect++;
-            else spacesIncorrect++;
+            if (expected === typed) {
+              correctChars++;
+            } else {
+              incorrectChars++;
+            }
           }
         }
       });
 
-      const totalCorrect = correct + spacesCorrect;
-      const totalIncorrect = incorrect + extra + spacesIncorrect;
-      const totalTypedChars = totalCorrect + totalIncorrect;
-
-      return { correct: totalCorrect, incorrect: totalIncorrect, extra, totalTypedChars };
+      return { correct: correctChars, incorrect: incorrectChars, extra: extraChars };
     }
 
     function calculateMetrics() {
@@ -1445,15 +1444,16 @@
 
       const domStats = getDOMCharacterStats();
 
-      // Standard formulation: WPM = (Correct Characters) / 5 / minutes
+      // Net WPM: Based solely on correct perfectly submitted characters on the screen
       const wpm = Math.max(0, Math.round((domStats.correct / 5) / minutes));
       
-      // Raw WPM = (Total Typed Characters) / 5 / minutes
-      const raw = Math.max(0, Math.round((domStats.totalTypedChars / 5) / minutes));
+      // Raw WPM: Based on all current characters registered on screen
+      const totalCharsOnScreen = domStats.correct + domStats.incorrect + domStats.extra;
+      const raw = Math.max(0, Math.round((totalCharsOnScreen / 5) / minutes));
       
-      // Accuracy
-      const acc = domStats.totalTypedChars > 0 
-        ? Math.min(100, Math.round((domStats.correct / domStats.totalTypedChars) * 100)) 
+      // Accuracy: Based on ALL lifetime keystrokes during the test, penalizing spam
+      const acc = state.lifetimeTotalKeystrokes > 0 
+        ? Math.min(100, Math.round((state.lifetimeCorrectKeystrokes / state.lifetimeTotalKeystrokes) * 100)) 
         : 100;
 
       return { wpm, raw, acc, elapsedSec, domStats };
@@ -1510,15 +1510,19 @@
         : `${Math.round(finalSec)}s`;
 
       // Record the precise end-of-test frame for an accurate chart ending
-      state.wpmHistory.push(metrics.wpm);
-      state.rawHistory.push(metrics.raw);
-      state.timeHistory.push(finalSec);
+      if (finalSec > 0) {
+        state.wpmHistory.push(metrics.wpm);
+        state.rawHistory.push(metrics.raw);
+        state.timeHistory.push(finalSec);
+      }
+
+      const totalIncorrectTyped = metrics.domStats.incorrect + metrics.domStats.extra;
 
       document.getElementById('res-wpm').textContent = metrics.wpm;
       document.getElementById('res-acc').textContent = `${metrics.acc}% Acc`;
       document.getElementById('res-raw').textContent = `${metrics.raw} WPM`;
       document.getElementById('res-type').textContent = state.mode === 'time' ? `Time ${state.targetTime}s` : `Words ${state.targetWords}`;
-      document.getElementById('res-chars').textContent = `${metrics.domStats.correct}/${metrics.domStats.incorrect}/${metrics.domStats.totalTypedChars}`;
+      document.getElementById('res-chars').textContent = `${metrics.domStats.correct}/${totalIncorrectTyped}/${state.lifetimeTotalKeystrokes}`;
       document.getElementById('res-time').textContent = formattedTime;
 
       switchView('results');
@@ -1541,20 +1545,20 @@
       const mutedColor = isDark ? '#868e96' : '#6c757d';
       const gridColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)';
 
-      let labels = ['0s', ...state.timeHistory.map(t => typeof t === 'number' && !Number.isInteger(t) ? `${t.toFixed(1)}s` : `${t}s`)];
-      let wpmData = [0, ...state.wpmHistory];
-      let rawData = [0, ...state.rawHistory];
+      let labels = state.timeHistory.map(t => typeof t === 'number' && !Number.isInteger(t) ? `${t.toFixed(1)}s` : `${t}s`);
+      let wpmData = [...state.wpmHistory];
+      let rawData = [...state.rawHistory];
 
       // Safe fallback for extremely short/broken tests avoiding floating single dots
-      if (labels.length === 1) {
-        labels = ['0s', '1s'];
-        wpmData = [0, 0];
-        rawData = [0, 0];
+      if (labels.length <= 1) {
+        labels = ['1s', '2s'];
+        wpmData = wpmData.length === 1 ? [wpmData[0], wpmData[0]] : [0, 0];
+        rawData = rawData.length === 1 ? [rawData[0], rawData[0]] : [0, 0];
       }
 
       const maxVal = Math.max(...wpmData, ...rawData, 10);
-      const yMax = Math.ceil((maxVal + 5) / 10) * 10;
-      const yMin = 0;
+      const yMax = Math.ceil((maxVal + 10) / 10) * 10;
+      const yMin = 0; // Strictly ensure minimum axis is zero
 
       const ctx = canvas.getContext('2d');
       const gradient = ctx.createLinearGradient(0, 0, 0, 300);
@@ -1576,7 +1580,7 @@
               borderWidth: 3,
               pointBackgroundColor: '#1086dc',
               pointBorderColor: '#ffffff',
-              pointRadius: labels.length > 30 ? 0 : 3,
+              pointRadius: labels.length > 30 ? 0 : 4,
               pointHoverRadius: 6,
               clip: false
             },
@@ -1601,9 +1605,9 @@
           layout: {
             padding: {
               bottom: 10,
-              top: 5,
-              left: 5,
-              right: 5
+              top: 10,
+              left: 10,
+              right: 15
             }
           },
           interaction: {
@@ -1640,10 +1644,15 @@
               }
             },
             y: {
+              beginAtZero: true,
               min: yMin,
               max: yMax,
               grid: { color: gridColor, drawBorder: false },
-              ticks: { color: mutedColor, font: { family: 'JetBrains Mono', size: 11 } }
+              ticks: { 
+                color: mutedColor, 
+                font: { family: 'JetBrains Mono', size: 11 },
+                stepSize: Math.ceil(yMax / 5)
+              }
             }
           }
         }
@@ -1652,11 +1661,6 @@
 
     /* =========================================================================
        6. UNIFIED INPUT PROCESSOR & EXACT TEST ENDING RULES
-       =========================================================================
-       Rule 1: Only automatically end the test if the user types the last word
-               ACCURATELY (the words prior do not matter).
-       Rule 2: If the last word is typed inaccurately, the user must press the
-               space button to end the test.
        ========================================================================= */
     function checkAutoEnd() {
       const isLastWordInWordsMode = (state.mode === 'words' && state.activeWordIdx === state.targetWords - 1);
@@ -1689,7 +1693,7 @@
       const targetWord = state.words[state.activeWordIdx];
       const chars = wordEl.querySelectorAll('.char');
 
-      // BACKSPACE HANDLING
+      // BACKSPACE HANDLING (Not counted as a keystroke in accuracy calculations as per standard logic)
       if (key === 'Backspace') {
         if (state.activeCharIdx > 0) {
           state.activeCharIdx--;
@@ -1704,7 +1708,7 @@
           state.activeWordIdx--;
           const prevWordEl = words[state.activeWordIdx];
           const prevChars = prevWordEl.querySelectorAll('.char');
-          state.activeCharIdx = prevChars.length;
+          state.activeCharIdx = state.typedHistory[state.activeWordIdx].length;
         }
         updateCaret();
         checkAutoEnd();
@@ -1713,7 +1717,17 @@
 
       // SPACEBAR HANDLING
       if (key === ' ') {
-        if (state.activeCharIdx > 0) {
+        if (state.activeCharIdx > 0 || state.activeWordIdx > 0) {
+          state.lifetimeTotalKeystrokes++;
+          
+          const expectedWord = state.words[state.activeWordIdx];
+          const typedWord = state.typedHistory[state.activeWordIdx] || "";
+          
+          // Reward space as correct keystroke only if word is entirely accurate
+          if (expectedWord === typedWord) {
+             state.lifetimeCorrectKeystrokes++;
+          }
+
           const isLastWordInWordsMode = (state.mode === 'words' && state.activeWordIdx === state.targetWords - 1);
           const isLastWordInBank = (state.activeWordIdx === state.words.length - 1);
           const isLastWord = isLastWordInWordsMode || isLastWordInBank;
@@ -1741,6 +1755,7 @@
       if (key.length > 1) return;
 
       // CHARACTER TYPING LOGIC
+      state.lifetimeTotalKeystrokes++;
       const expectedChar = targetWord[state.activeCharIdx];
 
       if (state.activeCharIdx < targetWord.length) {
@@ -1748,6 +1763,7 @@
         if (charSpan) {
           if (key === expectedChar) {
             charSpan.classList.add('correct');
+            state.lifetimeCorrectKeystrokes++;
           } else {
             charSpan.classList.add('incorrect');
           }
